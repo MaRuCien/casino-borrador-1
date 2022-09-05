@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, Usuario, Empresa, Casino, Menu, Semana, Dia, Reporte_Usuario
+from api.models import db, Usuario, Empresa, Casino, Menu, Semana, Reporte_Usuario
 from api.utils import generate_sitemap, APIException
 import os
 from flask_jwt_extended import create_access_token
@@ -462,6 +462,92 @@ def get_semana(id = None):
         semana.update()
 
         return jsonify(semana.serialize()), 200
+    
+    if request.method == 'DELETE':
+        semana = Semana.query.get(id)
+        if not semana: return jsonify({ "msg": "No encontramos la semana" }), 404
+
+        semana.delete()
+        return jsonify({ "msg": "Semana eliminada" }), 200
+
+#crear el menú
+@api.route('menu', methods=['GET', 'POST'])
+@api.route('menu/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def get_menu(id = None):
+    if request.method == 'GET':
+        if id is not None:
+            menu: Menu.query.get(id)
+            if not menu: return jsonify({ "msg": "No encontramos este menú" }), 404
+            return jsonify(menu.serialize()), 200
+        else:
+            menus = Menu.query.all()
+            menus = list(map(lambda menu: menu.serialize(), menus))
+
+            return jsonify(menus), 200
+
+    if request.method == 'POST':
+        semana_id = request.json.get("semana_id")
+        dia = request.json.get("dia")
+        ensalada = request.json.get("ensalada")
+        principal = request.json.get("principal")
+        postre = request.json.get("postre")
+        bebida = request.json.get("bebida")
+ 
+
+        if not semana_id: return jsonify({ "msg": "Se enecesita el id de la semana" }), 400
+        if not dia: return jsonify({ "msg": "Se enecesita el día de este menú" }), 400
+        if not ensalada: return jsonify({ "msg": "Se enecesita la ensalada" }), 400
+        if not principal: return jsonify({ "msg": "Se enecesita el plato principal" }), 400
+        if not postre: return jsonify({ "msg": "Se enecesita el postre" }), 400
+        if not bebida: return jsonify({ "msg": "Se necesita la bebida" }), 400
+
+        menu = Menu()
+        menu.semana_id = semana_id
+        menu.dia = dia
+        menu.ensalada = ensalada
+        menu.principal = principal
+        menu.postre = postre
+        menu.bebida = bebida
+        menu.save()
+
+        return jsonify(menu.serialize()), 201
+    
+    if request.method == 'PUT':
+        semana_id = request.json.get("semana_id")
+        dia = request.json.get("dia")
+        ensalada = request.json.get("ensalada")
+        principal = request.json.get("principal")
+        postre = request.json.get("postre")
+        bebida = request.json.get("bebida")
+ 
+
+        if not semana_id: return jsonify({ "msg": "Se enecesita el id de la semana" }), 400
+        if not dia: return jsonify({ "msg": "Se enecesita el día de este menú" }), 400
+        if not ensalada: return jsonify({ "msg": "Se enecesita la ensalada" }), 400
+        if not principal: return jsonify({ "msg": "Se enecesita el plato principal" }), 400
+        if not postre: return jsonify({ "msg": "Se enecesita el postre" }), 400
+        if not bebida: return jsonify({ "msg": "Se necesita la bebida" }), 400
+
+        menu = Menu()
+        menu.semana_id = semana_id
+        menu.dia = dia
+        menu.ensalada = ensalada
+        menu.principal = principal
+        menu.postre = postre
+        menu.bebida = bebida
+        menu.update()
+
+        return jsonify(menu.serialize()), 200
+
+    if request.method == 'DELETE':
+        menu = Menu.query.get(id)
+        if not menu: return jsonify({ "msg": "No encontramos este menú" }), 404
+
+        menu.delete()
+        return jsonify({ "msg": "Menú eliminada" }), 200
+
+
+
 
 @api.route('problema-usuario', methods=['GET', 'POST'])
 @api.route('problema-usuario/<int:id>', methods=['GET'])
