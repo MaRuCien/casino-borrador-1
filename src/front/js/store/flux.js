@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			apiURL: 'https://3001-marellanore-casinoborra-qa12kkikt1e.ws-us63.gitpod.io',
 			token: null,
 			message: null,
 			user: {
@@ -22,7 +23,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			menu: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -51,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						'password': password
 					})
 				};
-				await fetch(process.env.BACKEND_URL + '/api/register', opts)
+				await fetch(url+'/api/register', opts)
 					.then(response => response.json())
 					.then((data) => {
 						console.log(data);
@@ -81,7 +83,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  };
 			      try
 				  {const resp = await fetch(
-					'https://3001-marellanore-casinocorpo-gkyhs8gqlox.ws-us63.gitpod.io/api/login/user',
+					url+'/api/login/user',
 					ops
 				  )
 					
@@ -103,7 +105,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			 getMessage: async () => {
 				try{
 			 		// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
+					const resp = await fetch(url + "/api/hello")
 			 		const data = await resp.json()
 			 		setStore({ message: data.message })
 			 		// don't forget to return something, that is how the async resolves
@@ -129,7 +131,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
-			createMenu: async (dia, principal, ensalada, postre, bebida) => {
+			createMenu: async (semana_id, dia, principal, ensalada, postre, bebida) => {
 				
 				const opts = {
 					method: 'POST',
@@ -137,14 +139,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
+						'semana_id': semana_id,
 						'dia': dia,
 						'ensalada': ensalada,
 						'principal': principal,
 						'postre': postre,
 						'bebida': bebida
+						
 					})
 				};
-				await fetch(process.env.BACKEND_URL + '/api/menu', opts)
+				await fetch(url+'/api/menu', opts)
 					.then(response => response.json())
 					.then((data) => {
 						console.log(data);
@@ -152,6 +156,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch((error) => {
 						console.error(error);
 					})
+				},
+				getMenuById: async (url,id) =>{
+					try{
+						const response = await fetch(url+'/api/semana'+id);
+						if(!response.ok) throw new Error('error al consultar el menú');
+						const data = await response.json();
+
+						setStore({
+							menu: data
+						})
+					} catch(error){
+						console.log(error)
+					}
 				},
 			}
 		}

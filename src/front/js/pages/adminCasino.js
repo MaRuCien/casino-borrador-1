@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const AdminCasino = () => {
 
   const { store, actions } = useContext(Context);
+  const [semana_id, setSemana_id] = useState(0);
   const [dia, setDia] = useState('');
   const [ensalada, setEnsalada] = useState('');
   const [principal, setPrincipal] = useState('');
@@ -12,15 +13,23 @@ const AdminCasino = () => {
   const [bebida, setBebida] = useState('');
   const navigate = useNavigate();
 
+  
 
   const menu = (event) => {
       event.preventDefault();
-      actions.createMenu(dia, ensalada, principal, postre, bebida);
+      actions.createMenu(semana_id, dia, ensalada, principal, postre, bebida);
       navigate('/menu-casino');
   };
 
   return (
     <form onSubmit={menu} className="container border border-5 border-success mt-5 shadow-lg p-3 mb-5 bg-white rounded" >
+      <input 
+      placeholder="Empresa"
+      className="mt-3"
+      type="text"
+      name="empresa_id"
+      value={semana_id}
+      onChange={event => setSemana_id(event.target.value)}/>
       <input 
       placeholder="Día (de la semana)"
       className="mt-3"
