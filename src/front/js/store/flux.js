@@ -127,9 +127,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			createMenu: async (dia, principal, ensalada, postre, bebida) => {
+				
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'dia': dia,
+						'ensalada': ensalada,
+						'principal': principal,
+						'postre': postre,
+						'bebida': bebida
+					})
+				};
+				await fetch(process.env.BACKEND_URL + '/api/menu', opts)
+					.then(response => response.json())
+					.then((data) => {
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+				},
 			}
 		}
 	};
-};
+
 
 export default getState;
