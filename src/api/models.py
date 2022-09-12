@@ -132,33 +132,39 @@ class Casino(db.Model):
          db.session.delete(self)
          db.session.commit()
 
-
-class Semana(db.Model):
-    __tablename__ = 'semanas'
+class Menu(db.Model):
+    __tablename__ = 'menus'
     id = db.Column(db.Integer, primary_key=True)
-    #dias = db.relationship('Dia', backref="semana")
-    lunes = db.Column(db.String(80), unique=True, nullable=True)
-    martes = db.Column(db.String(80), unique=True, nullable=True)
-    miercoles = db.Column(db.String(80), unique=True, nullable=True)
-    jueves = db.Column(db.String(80), unique=True, nullable=True)
-    viernes = db.Column(db.String(80), unique=True, nullable=True)
-    menus = db.relationship('Menu', backref="semana")
+    principal = db.Column(db.String(180), nullable=False, unique=True)
+    ensalada = db.Column(db.String(180), nullable=False, unique=True)
+    postre = db.Column(db.String(180), nullable=False, unique=True)
+    bebida = db.Column(db.String(180), nullable=False)
+    dia_id = db.Column(db.Integer, db.ForeignKey('dias.id'), nullable=False)
+
 
     def serialize(self):
         return {
-            "id":self.id,
-            "lunes": self.lunes,
-            "martes": self.martes,
-            "miercoles":self.miercoles,
-            "jueves":self.jueves,
-            "viernes": self.viernes
-             # do not serialize the password, its a security breach
-         }
+            "id" : self.id,
+            "principal" : self.principal,
+            "ensalada" : self.ensalada,
+            "postre" : self.postre,
+            "bebida" : self.bebida
+        }
+
+    def serialize_with_dias(self):
+        return{
+            "id" : self.id,
+            "principal" : self.principal,
+            "ensalada" : self.ensalada,
+            "postre" : self.postre,
+            "bebida" : self.bebida,
+            
+        }
     
     def save(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
     
@@ -166,59 +172,29 @@ class Semana(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
-#class Dia(db.Model):
-#    id = db.Column(db.Integer, primary_key=True)
-#    dia = db.Column(db.String(180), unique=True, nullable=False)
-#    semana_id= db.Column(db.Integer, db.ForeignKey('semanas.id'), nullable=False)
-#    menu = db.relationship('Menu', backref="dia", uselist=False)
-
-#    def serialize(self):
-#        return {
-#            "id":self.id,
-#            "dia": self.dia,
-#            "semana_id":self.semana_id,
-            
-             # do not serialize the password, its a security breach
-#         }
-    
-#    def save(self):
-#        db.session.add(self)
-#        db.session.commit()
-    
-#    def update(self):
-#        db.session.commit()
-    
-#    def delete(self):
-#        db.session.delete(self)
-#        db.session.commit()
-
-class Menu(db.Model):
+class Dia(db.Model):
+    __tablename__ ='dias'
     id = db.Column(db.Integer, primary_key=True)
-    dia = db.Column(db.String(180), unique=True, nullable=False)
-    ensalada = db.Column(db.String(180), unique=True, nullable=False)
-    principal = db.Column(db.String(180), unique=True, nullable=False)
-    postre = db.Column(db.String(180), unique=True, nullable=False)
-    bebida = db.Column(db.String(180), unique=True, nullable=False)
-    #dia_id = db.Column(db.Integer, db.ForeignKey('dia.id'), nullable="False")
-    semana_id= db.Column(db.Integer, db.ForeignKey('semanas.id'), nullable=False)
+    dia = db.Column(db.String(80), nullable=False)
+    menu = db.relationship('Menu', backref="dias", uselist=False)
 
     def serialize(self):
         return {
-            "id": self.id,
-            "semana_id": self.semana_id,
+            "id" : self.id,
+            "dia" : self.dia
+        }
+
+    def serialize_with_menus(self):
+        return{
+            "id" : self.id,
             "dia": self.dia,
-            "ensalada": self.ensalada,
-            "principal": self.principal,
-            "postre":self.postre,
-            "bebida":self.bebida            
-             # do not serialize the password, its a security breach
-         }
+            "menus": self.menu.serialize()
+        }
     
     def save(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
     

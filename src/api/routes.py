@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, Usuario, Empresa, Casino, Menu, Semana, Reporte_Usuario
+from api.models import db, Usuario, Empresa, Casino, Menu, Dia, Reporte_Usuario
 from api.utils import generate_sitemap, APIException
 import os
 from flask_jwt_extended import create_access_token
@@ -25,6 +25,7 @@ def create_token():
     return jsonify(access_token=access_token)
 
 
+##Registro usuario, empresa y casino
 
 @api.route('/register', methods=['POST'])
 def Usuario_add():
@@ -68,11 +69,159 @@ def Usuario_add():
                               )
         db.session.add(new_usuario)
         db.session.commit()
-        return jsonify({"msg": "User added successfully!"}), 200
+        return jsonify({"msg": "Usuario creado!"}), 200
+
+
+@api.route('/registro', methods=['POST'])
+def Empresa_add():
+    request_body_empresa = request.get_json()
+
+    nombre = request.json.get('nombre', None)
+    telefono = request.json.get('telefono', None)
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    direccion = request.json.get('direccion', None)
+
+    if nombre is None:
+        return 'Escriba el nombre de empresa', 400
+    if telefono is None:
+        return 'Escriba el telefono de la empresa', 400
+    if email is None:
+        return 'Escriba el email de empresa', 400
+    if password is None:
+        return 'Escriba su password', 400
+    if direccion is None:
+        return 'Escriba la direccion de la empresa', 400
+
+    empresa = Empresa.query.filter_by(email=email).first()
+
+    if empresa:
+        return jsonify({"msg": "Esta empresa se encuentra registrada"})
+    else:
+        new_empresa = Empresa(nombre=request_body_empresa['nombre'],
+                              telefono=request_body_empresa['telefono'],
+                              email=request_body_empresa['email'],
+                              password=request_body_empresa['password'],
+                              direccion=request_body_empresa['direccion'],
+                              )
+        db.session.add(new_empresa)
+        db.session.commit()
+        return jsonify({"msg": "¡Se registró la empresa con éxito!"}), 200
 
 
 
-#creación, actualización y eliminación de emperesa | también get para verlas
+@api.route('/registro-casino', methods=['POST'])
+def Casino_add():
+    request_body_casino = request.get_json()
+
+    nombre = request.json.get('nombre', None)
+    telefono = request.json.get('telefono', None)
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    direccion = request.json.get('direccion', None)
+
+    if nombre is None:
+        return 'Escriba el nombre del casino', 400
+    if telefono is None:
+        return 'Escriba el telefono del casino', 400
+    if email is None:
+        return 'Escriba el email del casino', 400
+    if password is None:
+        return 'Escriba el password del casino', 400
+    if direccion is None:
+        return 'Escriba la direccion del casino', 400
+
+    casino = Casino.query.filter_by(email=email).first()
+
+    if casino:
+        return jsonify({"msg": "Este casino ya se encuentra registrado"})
+    else:
+        new_casino = Casino(nombre=request_body_casino['nombre'],
+                              telefono=request_body_casino['telefono'],
+                              email=request_body_casino['email'],
+                              password=request_body_casino['password'],
+                              direccion=request_body_casino['direccion'],
+                              )
+        db.session.add(new_casino)
+        db.session.commit()
+        return jsonify({"msg": "¡Se registró el casino con éxito!"}), 200
+
+
+## Login usuario, empresa y casino
+@api.route('/login/user', methods=['POST'])
+def login_usuario():
+    body = request.get_json()
+
+    email = request.json.get('email',None)
+    password = request.json.get('password', None)
+
+    usuario = Usuario.query.filter_by(email=email, password = password).first()
+    if not usuario:
+        return jsonify({"msg":"Usuario/Contraseña no coinciden"}), 400
+
+    access_token  = create_access_token(identity=usuario.email)
+
+    data ={
+        "user": usuario.serialize(),
+        "access_token":access_token
+    }
+
+    return jsonify(data), 200
+
+
+@api.route('/login/empresa', methods=['POST'])
+def login_empresa():
+    body = request.get_json()
+
+    email = request.json.get('email',None)
+    password = request.json.get('password', None)
+
+    empresa = Empresa.query.filter_by(email=email, password = password).first()
+    if not empresa:
+        return jsonify({"msg":"Empresa/Contraseña no coinciden"}), 400
+
+    access_token  = create_access_token(identity=empresa.email)
+
+    data ={
+        "empresa": empresa.serialize(),
+        "access_token":access_token
+    }
+
+    return jsonify(data), 200
+
+
+@api.route('/login/casino', methods=['POST'])
+def login_casino():
+    body = request.get_json()
+
+    email = request.json.get('email',None)
+    password = request.json.get('password', None)
+
+    casino = Casino.query.filter_by(email=email, password = password).first()
+    if not casino:
+        return jsonify({"msg":"Casino/Contraseña no coinciden"}), 400
+
+    access_token  = create_access_token(identity=casino.email)
+
+    data ={
+        "casino": casino.serialize(),
+        "access_token":access_token
+    }
+
+    return jsonify(data), 200
+
+#Para las páginas privadas
+
+@api.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
+
+
+#creación, actualización y eliminación de empresa | también get para verlas
 @api.route('empresa', methods=['GET', 'POST'])
 @api.route('empresa/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def get_company(id = None):
@@ -398,157 +547,6 @@ def lista_empresa():
 
     return jsonify(listas), 200
 
-# menús
-#obtener, crear, actualizar y/o borrar menús
-#primero crear la semana
-@api.route('semana', methods=['GET', 'POST'])
-@api.route('semana/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-def get_semana(id = None):
-    if request.method == 'GET':
-        if id is not None:
-            semana: Semana.query.get(id)
-            if not semana: return jsonify({ "msg": "No encontramos esta semana" }), 404
-            return jsonify(empresa.serialize()), 200
-        else:
-            semanas = Semana.query.all()
-            semanas = list(map(lambda semana: semana.serialize(), semanas))
-
-            return jsonify(semanas), 200
-    
-    if request.method == 'POST':
-        lunes = request.json.get("lunes")
-        martes = request.json.get("martes")
-        miercoles = request.json.get("miercoles")
-        jueves = request.json.get("jueves")
-        viernes = request.json.get("viernes")
- 
-
-        if not lunes: return jsonify({ "msg": "Se enecesita el día Lunes" }), 400
-        if not martes: return jsonify({ "msg": "Se enecesita el día Martes" }), 400
-        if not miercoles: return jsonify({ "msg": "Se enecesita el día Miércoles" }), 400
-        if not jueves: return jsonify({ "msg": "Se enecesita el día Jueves" }), 400
-        if not viernes: return jsonify({ "msg": "Se enecesita el día Viernes" }), 400
-
-        semana = Semana()
-        semana.lunes = lunes
-        semana.martes = martes
-        semana.miercoles = miercoles
-        semana.jueves = jueves
-        semana.viernes = viernes
-        semana.save()
-
-        return jsonify(semana.serialize()), 201
-    
-    if request.method == 'PUT':
-        lunes = request.json.get("lunes")
-        martes = request.json.get("martes")
-        miercoles = request.json.get("miercoles")
-        jueves = request.json.get("jueves")
-        viernes = request.json.get("viernes")
- 
-
-        if not lunes: return jsonify({ "msg": "Se enecesita el día Lunes" }), 400
-        if not martes: return jsonify({ "msg": "Se enecesita el día Martes" }), 400
-        if not miercoles: return jsonify({ "msg": "Se enecesita el día Miércoles" }), 400
-        if not jueves: return jsonify({ "msg": "Se enecesita el día Jueves" }), 400
-        if not viernes: return jsonify({ "msg": "Se enecesita el día Viernes" }), 400
-
-        semana = Semana()
-        semana.lunes = lunes
-        semana.martes = martes
-        semana.miercoles = miercoles
-        semana.jueves = jueves
-        semana.viernes = viernes
-        semana.update()
-
-        return jsonify(semana.serialize()), 200
-    
-    if request.method == 'DELETE':
-        semana = Semana.query.get(id)
-        if not semana: return jsonify({ "msg": "No encontramos la semana" }), 404
-
-        semana.delete()
-        return jsonify({ "msg": "Semana eliminada" }), 200
-
-#crear el menú
-@api.route('menu', methods=['GET', 'POST'])
-@api.route('menu/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-def get_menu(id = None):
-    if request.method == 'GET':
-        if id is not None:
-            menu: Menu.query.get(id)
-            if not menu: return jsonify({ "msg": "No encontramos este menú" }), 404
-            return jsonify(menu.serialize()), 200
-        else:
-            menus = Menu.query.all()
-            menus = list(map(lambda menu: menu.serialize(), menus))
-
-            return jsonify(menus), 200
-
-    if request.method == 'POST':
-        semana_id = request.json.get("semana_id")
-        dia = request.json.get("dia")
-        ensalada = request.json.get("ensalada")
-        principal = request.json.get("principal")
-        postre = request.json.get("postre")
-        bebida = request.json.get("bebida")
- 
-
-        if not semana_id: return jsonify({ "msg": "Se enecesita el id de la semana" }), 400
-        if not dia: return jsonify({ "msg": "Se enecesita el día de este menú" }), 400
-        if not ensalada: return jsonify({ "msg": "Se enecesita la ensalada" }), 400
-        if not principal: return jsonify({ "msg": "Se enecesita el plato principal" }), 400
-        if not postre: return jsonify({ "msg": "Se enecesita el postre" }), 400
-        if not bebida: return jsonify({ "msg": "Se necesita la bebida" }), 400
-
-        menu = Menu()
-        menu.semana_id = semana_id
-        menu.dia = dia
-        menu.ensalada = ensalada
-        menu.principal = principal
-        menu.postre = postre
-        menu.bebida = bebida
-        menu.save()
-
-        return jsonify(menu.serialize()), 201
-    
-    if request.method == 'PUT':
-        semana_id = request.json.get("semana_id")
-        dia = request.json.get("dia")
-        ensalada = request.json.get("ensalada")
-        principal = request.json.get("principal")
-        postre = request.json.get("postre")
-        bebida = request.json.get("bebida")
- 
-
-        if not semana_id: return jsonify({ "msg": "Se enecesita el id de la semana" }), 400
-        if not dia: return jsonify({ "msg": "Se enecesita el día de este menú" }), 400
-        if not ensalada: return jsonify({ "msg": "Se enecesita la ensalada" }), 400
-        if not principal: return jsonify({ "msg": "Se enecesita el plato principal" }), 400
-        if not postre: return jsonify({ "msg": "Se enecesita el postre" }), 400
-        if not bebida: return jsonify({ "msg": "Se necesita la bebida" }), 400
-
-        menu = Menu()
-        menu.semana_id = semana_id
-        menu.dia = dia
-        menu.ensalada = ensalada
-        menu.principal = principal
-        menu.postre = postre
-        menu.bebida = bebida
-        menu.update()
-
-        return jsonify(menu.serialize()), 200
-
-    if request.method == 'DELETE':
-        menu = Menu.query.get(id)
-        if not menu: return jsonify({ "msg": "No encontramos este menú" }), 404
-
-        menu.delete()
-        return jsonify({ "msg": "Menú eliminada" }), 200
-
-
-
-
 @api.route('problema-usuario', methods=['GET', 'POST'])
 @api.route('problema-usuario/<int:id>', methods=['GET'])
 def Problema_usuario(id = None):
@@ -577,3 +575,158 @@ def Problema_usuario(id = None):
         reporte_usuario.save()
 
         return jsonify(reporte_usuario.serialize()), 201
+
+# menús
+@api.route('/menu', methods=['GET'])
+def all_menus():
+    if request.method == 'GET':
+        menus = Menu.query.all()
+        menus = list(map(lambda menu: menu.serialize(), menus))
+
+        return jsonify(menus), 200
+#Crear un menú nuevo
+@api.route('/menu', methods=['POST'])
+def create_menu():
+    if request.method == 'POST':
+        principal = request.json.get("principal")
+        ensalada = request.json.get("ensalada")
+        postre = request.json.get("postre")
+        bebida = request.json.get("bebida")
+ 
+
+        if not principal: return jsonify({ "msg": "Tiene que ofrecer un plato principal" }), 400
+        if not ensalada: return jsonify({ "msg": "Tiene que ofrecer una ensalada" }), 400
+        if not postre: return jsonify({ "msg": "Tiene que ofrecer un postre" }), 400
+        if not bebida: return jsonify({ "msg": "Tiene que ofrecer una bebida" }), 400
+
+        menu = Menu()
+        menu.principal = principal
+        menu.ensalada = ensalada
+        menu.postre = postre
+        menu.bebida = bebida
+        menu.save()
+
+        return jsonify(menu.serialize()), 201
+#Obtener un menú específico
+@api.route('/menu/<int:id>', methods=['GET'])
+def get_menu(id):
+    if not Menu.query.get(id): return jsonify({ "msg": "No encontramos el menu" }), 404
+    return jsonify(Menu.query.get(id).serialize()), 200
+#Actualizar el menú
+@api.route('/menu/<int:id>', methods=['PUT'])
+def update_menu(id):
+        principal = request.json.get("principal")
+        ensalada = request.json.get("ensalada")
+        postre = request.json.get("postre")
+        bebida = request.json.get("bebida")
+ 
+
+        if not principal: return jsonify({ "msg": "Tiene que ofrecer un plato principal" }), 400
+        if not ensalada: return jsonify({ "msg": "Tiene que ofrecer una ensalada" }), 400
+        if not postre: return jsonify({ "msg": "Tiene que ofrecer un postre" }), 400
+        if not bebida: return jsonify({ "msg": "Tiene que ofrecer una bebida" }), 400
+
+        menu = Menu()
+        menu.principal = principal
+        menu.ensalada = ensalada
+        menu.postre = postre
+        menu.bebida = bebida
+        menu.update()
+
+        return jsonify(menu.serialize()), 200
+#Borrar un menú específico    
+@api.route('/menu/<int:id>', methods=['DELETE'])
+def delete_menu(id):    
+    if request.method == 'DELETE':
+        menu = Menu.query.get(id)
+        if not menu: return jsonify({ "msg": "No encontramos el menú" }), 404
+
+        menu.delete()
+        return jsonify({ "msg": "Menú eliminado" }), 200
+#Conseguir los días creados
+@api.route('/dia', methods=['GET'])
+def all_dias():
+    if request.method == 'GET':
+        dias = Dia.query.all()
+        dias = list(map(lambda dia: dia.serialize(), dias))
+
+        return jsonify(dias), 200
+#Crear un día
+@api.route('/dia', methods=['POST'])
+def crear_dia():
+        dia = request.json.get("dia")
+
+        if not dia: return jsonify({ "msg": "El día debe ser asignado" }), 400
+        
+        new_dia = Dia()
+        new_dia.dia = dia
+        new_dia.save()
+
+        return jsonify(new_dia.serialize()), 201
+    
+#Mostrar un menú con el día asignado
+@api.route('/dia/menus', methods=['GET'])
+def get_menu_with_dia():
+        dias  = Dia.query.all()
+        dias = list(map(lambda dia: dia.serialize_with_menus(), dias))
+
+        return jsonify(dias), 200
+
+
+#Crear un menú con día asignado
+@api.route('/dia/menus', methods=['POST'])
+def create_menu_with_dia():
+
+    #traigo los datos
+    dia = request.json.get('dia')
+
+    principal = request.json.get('principal')
+    ensalada = request.json.get('ensalada')
+    postre = request.json.get('postre')
+    bebida = request.json.get('bebida')
+
+    new_dia = Dia()
+    new_dia.dia = dia
+
+    menu = Menu()
+    menu.principal = principal
+    menu.ensalada = ensalada
+    menu.postre = postre
+    menu.bebida = bebida
+
+    new_dia.menu = menu
+    new_dia.save()
+
+    return jsonify(new_dia.serialize_with_menus()), 201
+
+#Actualizar un menú con día asignado
+@api.route('/dia/menus/<int:id>', methods=['PUT'])
+def update_menu_with_dia(id):
+
+    #traigo los datos
+    dia = request.json.get('dia')
+
+    principal = request.json.get('principal')
+    ensalada = request.json.get('ensalada')
+    postre = request.json.get('postre')
+    bebida = request.json.get('bebida')
+
+    new_dia = Dia()
+    new_dia.dia = dia
+
+    menu = Menu()
+    menu.principal = principal
+    menu.ensalada = ensalada
+    menu.postre = postre
+    menu.bebida = bebida
+
+    new_dia.menu = menu
+    new_dia.save()
+
+    return jsonify(new_dia.serialize_with_menus()), 200
+
+#Día y Menú asignado, de forma individual
+@api.route('/dia/menus/<int:id>', methods=['GET'])
+def get_menu_with_diaById(id):
+    if not Dia.query.get(id): return jsonify({ "msg": "No encontramos el menu" }), 404
+    return jsonify(Dia.query.get(id).serialize_with_menus()), 200

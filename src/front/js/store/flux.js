@@ -131,32 +131,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
-			createMenu: async (semana_id, dia, principal, ensalada, postre, bebida) => {
-				
+			createMenu: async (dia, ensalada, principal, postre, bebida, navigate) => {
 				const opts = {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						'semana_id': semana_id,
 						'dia': dia,
 						'ensalada': ensalada,
 						'principal': principal,
 						'postre': postre,
 						'bebida': bebida
-						
 					})
 				};
-				await fetch(url+'/api/menu', opts)
+				await fetch('https://3001-marellanore-casinocorpo-fpg7xijocyu.ws-us64.gitpod.io/api/dia/menus', opts)
 					.then(response => response.json())
 					.then((data) => {
+						navigate('/menu-casino')
 						console.log(data);
 					})
 					.catch((error) => {
 						console.error(error);
 					})
-				},
+			},
 				getMenuById: async (url,id) =>{
 					try{
 						const response = await fetch(url+'/api/semana'+id);
