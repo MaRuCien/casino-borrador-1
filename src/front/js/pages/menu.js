@@ -6,7 +6,6 @@ const Menu = () => {
     return (
         <div className="container mt-5 mb-5">
             <h1>Menú de la semana</h1>
-            <div className="border border-success border-5 mt-5">
                 <h6 className="mt-3 p-4 ml-5">Semana 19 al 22 de Julio 2022</h6>
                 <div className="container">
                     <div className="row d-flex justify-content-center">
@@ -15,34 +14,15 @@ const Menu = () => {
                                 !!store.menus &&
                                 store.menus.map((menu) => {
                                     return(
-                                        <div className="col-sm-12 col-lg-2 border border-dark mb-4">
-                                            
-                                            <div className="container d-flex justify-content-between">
-                                                <h3>{menu.dia}</h3>
-                                            </div>
-                                            <div className="container d-flex justify-content-between mt-4">
-                                                <p><strong>Ensalada</strong></p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between">
-                                                <p>{menu.menus.ensalada}</p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between mt-4">
-                                                <p><strong>Plato principal</strong></p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between">
-                                                <p>{menu.menus.principal}</p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between mt-4">
-                                                <p><strong>Postre</strong></p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between">
-                                                <p>{menu.menus.postre}</p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between mt-4">
-                                                <p><strong>Jugo</strong></p>
-                                            </div>
-                                            <div className="container d-flex justify-content-between">
-                                                <p>{menu.menus.bebida}</p>
+                                        <div className="col-sm-12 col-lg-2 mb-4">
+                                            <div className="card">
+                                            <ul className="list-group list-group-flush">
+                                                <li className="list-group-item">{menu.dia}</li>
+                                                <li className="list-group-item">{menu.menus.ensalada}</li>
+                                                <li className="list-group-item">{menu.menus.principal}</li>
+                                                <li className="list-group-item">{menu.menus.postre}</li>
+                                                <li className="list-group-item">{menu.menus.bebida}</li>
+                                            </ul>
                                             </div>
                                         </div>
                                     )
@@ -55,8 +35,6 @@ const Menu = () => {
                                 <input type="checkbox" name="check" value="no" autocomplete="off" /> No, paso por hoy
                             </label>
                         </div>
-                    
-                </div>
             </div>
         </div>
     );
