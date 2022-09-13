@@ -12,9 +12,9 @@ const Menu = () => {
                         
                             {
                                 !!store.menus &&
-                                store.menus.map((menu) => {
+                                store.menus.map((menu, i) => {
                                     return(
-                                        <div className="col-sm-12 col-lg-2 mb-4">
+                                        <div key={i} className="col-sm-12 col-lg-2 mb-4">
                                             <div className="card">
                                             <ul className="list-group list-group-flush">
                                                 <li className="list-group-item">{menu.dia}</li>
