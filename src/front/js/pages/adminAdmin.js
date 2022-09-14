@@ -1,55 +1,38 @@
 import React from 'react'
+import '../../styles/adminEmpresa.css'
+import InfoCasino from '../component/infoCasino';
+import Usuarios from '../component/infoUsuarios';
 
-const ResumenPanelAdmin = () => {
+const DetalleEmpresa = () => {
     return (
 
         <div className="container mt-5">
-            <div className="row">
-                <div className="col-12">
-                    <div className="my-5">
-                        <h3>Resumen Panel Admin</h3>
-                        <hr />
-                    </div>
-                    <form className="file-upload">
-                        <div className="row mb-5 gx-5">
-                            <div className="col-xxl-8 mb-5 mb-xxl-0">
-                                <div className="bg-secondary-soft px-4 py-5 rounded">
-                                    <div className="row g-3">
-                                        <h4 className="mb-4 mt-0">Detalles de Ordenes</h4>
-                                        <div className="col-md-7">
-                                            <label className="form-label">Cantidad de Ordenes </label>
-                                            <input type="text" className="form-control" placeholder="" aria-label="First name" value="4XX" />
-                                        </div>
-                                        <div className="col-md-7">
-                                            <label className="form-label">Cantidad de Usuarios</label>
-                                            <input type="text" className="form-control" placeholder="" aria-label="Last name" value="4XX" />
-                                        </div>
-
-                                        <div className="col-md-7">
-                                            <label className="form-label">Cantidad de Empresas</label>
-                                            <input type="text" className="form-control" placeholder="" aria-label="Phone number" value="4XX" />
-                                        </div>
-
-                                        <div className="col-md-7">
-                                        <p>Direcciones de Usuario</p>
-                                            <div className="gap-3 d-inline-flex  justify-content-md-end text-center">
-                                                <button type="button" className="btn btn-success btn-lg">Ver Direcciones de Usuario</button>
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-    
-                    </form>
+        <div className="row">
+            <div className="col-12 mt-5">
+                <div className="my-5">
+                    <h3>Información para empresa</h3>
+                    <hr />
+                    El casino que se ocupa de tu empresa es:
+                    <InfoCasino />
+                    <hr/>
+                    Los usuarios que corresponden a tu empresa:
+                    <table className="table mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Dirección</th>
+                                <th scope="col">Teléfono</th>
+                            </tr>
+                        </thead>
+                    <Usuarios />
+                    </table>
                 </div>
+
             </div>
         </div>
+    </div>
 
 
 
@@ -57,4 +40,4 @@ const ResumenPanelAdmin = () => {
 }
 
 
-export default ResumenPanelAdmin;
+export default DetalleEmpresa;

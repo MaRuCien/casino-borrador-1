@@ -25,6 +25,9 @@ const injectContext = (PassedComponent) => {
       state.actions.syncTokenFromSessionStore();
       state.actions.getMenus(state.store.apiURL);
       state.actions.getDecision(state.store.apiURL);
+      state.actions.getCasino(state.store.apiURL);
+      state.actions.getEmpresa(state.store.apiURL);
+      state.actions.getUsuarios(state.store.apiURL);
     }, []);
 
     // The initial value for the context is not null anymore, but the current state of this component,

@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       apiURL:
-        "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/",
+        "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io",
       token: null,
       message: null,
       user: {
@@ -26,7 +26,10 @@ const getState = ({ getStore, getActions, setStore }) => {
         email: "",
       },
       menus: [],
-      entregas:[]
+      entregas:[],
+      infocasino:[],
+      get_usuarios:[],
+      get_empresa:[]
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -324,6 +327,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           setStore({
             entregas: data,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      getCasino: async () => {
+        try {
+          const response = await fetch(
+            "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/casino"
+          );
+          if (!response.ok) throw new Error("Error al consultar el casino");
+          const data = await response.json();
+
+          setStore({
+            infocasino: data,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      getUsuarios: async () => {
+        try {
+          const response = await fetch(
+            "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/usuario"
+          );
+          if (!response.ok) throw new Error("Error al consultar el casino");
+          const data = await response.json();
+
+          setStore({
+            get_usuarios: data,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      getEmpresa: async () => {
+        try {
+          const response = await fetch(
+            "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/empresa"
+          );
+          if (!response.ok) throw new Error("Error al consultar la empresa");
+          const data = await response.json();
+
+          setStore({
+            get_empresa: data,
           });
         } catch (error) {
           console.log(error);

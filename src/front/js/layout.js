@@ -12,7 +12,7 @@ import Footer from "./component/footer";
 import Login from "./pages/login";
 import AdminCasino from "./pages/adminCasino";
 import MenuCasino from "./pages/menuCasino";
-import ResumenPanelAdmin from "./pages/adminAdmin";
+import DetalleEmpresa from "./pages/adminAdmin";
 import PasswordRecoveryEmail from "./pages/passwordRecovery";
 import PerfilEmpresa from "./pages/perfilEmpresa";
 import Menu from "./pages/menu";
@@ -45,7 +45,7 @@ const Layout = () => {
           <Navbar />
           <Routes>
             
-            <Route element={<ResumenPanelAdmin />} path="/admin"></Route>
+            <Route element={<DetalleEmpresa />} path="/detalle-empresa"></Route>
             <Route element={<InfoEmpresa />} path="/informacion-empresa"></Route>
            <Route element={<DireccionesUsuario />} path="/informacion-delivery"></Route>
            <Route element={<DatosProblemas />} path="/detalle-problema"></Route>
