@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       apiURL:
-        "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io",
+        "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io",
       token: null,
       message: null,
       user: {
@@ -40,44 +40,32 @@ const getState = ({ getStore, getActions, setStore }) => {
         if (token && token != "" && token != undefined)
           setStore({ token: token });
       },
-      register: async (
-        nombre,
-        apellido,
-        telefono,
-        direccion,
-        email,
-        password,
-        empresa,
-        navigate
-      ) => {
-        const opts = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nombre,
-            apellido: apellido,
-            telefono: telefono,
-            direccion: direccion,
-            email: email,
-            password: password,
-            empresa_id: empresa,
-          }),
-        };
-        await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/register",
-          opts
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            navigate("/login");
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      },
+      register: async (nombre, apellido, telefono, direccion, email, password, empresa, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'nombre': nombre,
+						'apellido': apellido,
+						'telefono': telefono,
+						'direccion': direccion,
+						'email': email,
+						'password': password,
+						'empresa_id': empresa
+					})
+				};
+				await fetch('https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/register', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/login');
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
       registroEmpresa: async (
         nombre,
         telefono,
@@ -100,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/registro",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/registro",
           opts
         )
           .then((response) => response.json())
@@ -134,7 +122,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/registro-casino",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/registro-casino",
           opts
         )
           .then((response) => response.json())
@@ -159,7 +147,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/login/user",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/login/user",
           opts
         )
           .then((response) => response.json())
@@ -186,7 +174,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/login/empresa",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/login/empresa",
           opts
         )
           .then((response) => response.json())
@@ -213,7 +201,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/login/casino",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/login/casino",
           opts
         )
           .then((response) => response.json())
@@ -237,7 +225,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         // retrieve token form localStorage
         const token = sessionStorage.getItem("token");
         const response = await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/protected",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/protected",
           {
             method: "GET",
             headers: {
@@ -273,7 +261,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/dia/menus",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/dia/menus",
           opts
         )
           .then((response) => response.json())
@@ -299,7 +287,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/decision-almuerzo",
+          "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/decision-almuerzo",
           opts
         )
           .then((response) => response.json())
@@ -314,7 +302,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       getMenus: async () => {
         try {
           const response = await fetch(
-            "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/dia/menus"
+            "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/dia/menus"
           );
           if (!response.ok) throw new Error("Error al consultar menús");
           const data = await response.json();
@@ -329,7 +317,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       getDecision: async () => {
         try {
           const response = await fetch(
-            "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/entregas"
+            "https://3001-marellanore-casinoborra-vr2fuz5qrx5.ws-us65.gitpod.io/api/entregas"
           );
           if (!response.ok) throw new Error("Error al consultar las entregas");
           const data = await response.json();

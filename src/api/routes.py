@@ -581,14 +581,14 @@ def Problema_usuario(id = None):
 def D_almuerzo(id = None):
     if request.method == 'GET':
         if id is not None:
-            request.method: Decision_Almuerzo.query.get(id)
-            if not decision_almuerzo: return jsonify({ "msg": "No registramos su decision de Almuerzo" }), 404
-            return jsonify(decision_almuerzo.serialize()), 200
+            request.method: Decision.query.get(id)
+            if not decision: return jsonify({ "msg": "No registramos su decision de Almuerzo" }), 404
+            return jsonify(decision.serialize()), 200
         else:
-            decision_almuerzo = Decision_Almuerzo.query.all()
-            decision_almuerzo = list(map(lambda decision_almuerzo: decision_almuerzo.serialize(), decision_almuerzo))
+            decision = Decision.query.all()
+            decision = list(map(lambda decision: decision.serialize(), decision))
 
-            return jsonify(decision_almuerzo), 200
+            return jsonify(decision), 200
     
     if request.method == 'POST':
         decision = request.json.get("decision")
