@@ -2,135 +2,211 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       apiURL:
-        "https://3001-marellanore-casinoborra-qa12kkikt1e.ws-us63.gitpod.io",
-      token: null,
-      message: null,
-      user: {
-        nombre: "",
-        apellido: "",
-        telefono: "",
-        direccion: "",
-        email: "",
-        token: "",
-      },
-      demo: [
-        {
-          title: "FIRST",
-          background: "white",
-          initial: "white",
+        "https://3001-marellanore-casinoborra-2e7rar8irwl.ws-us65.gitpod.io/",
+        token: null,
+        message: null,
+        user: {
+          'nombre': '',
+          'apellido': '',
+          'telefono': '',
+          'direccion': '',
+          'email': '',
+          'empresa_id': ''
         },
-        {
-          title: "SECOND",
-          background: "white",
-          initial: "white",
+        empresa: {
+          'nombre': '',
+          'telefono': '',
+          'direccion': '',
+          'email': ''
         },
-      ],
+        casino: {
+          'nombre': '',
+          'telefono': '',
+          'direccion': '',
+          'email': ''
+        },
       menus: [],
     },
     actions: {
       // Use getActions to call a function within a fuction
-      exampleFunction: () => {
-        getActions().changeColor(0, "green");
-      },
+			exampleFunction: () => {
+				getActions().changeColor(0, "green");
+			},
 
-      syncTokenFromSessionStore: () => {
-        const token = sessionStorage.getItem("token");
-        console.log("Application loaded");
-        if (token && token != "" && token != undefined)
-          setStore({ token: token });
-      },
-      register: async (
-        nombre,
-        apellido,
-        telefono,
-        direccion,
-        email,
-        password
-      ) => {
-        const opts = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nombre,
-            apellido: apellido,
-            telefono: telefono,
-            direccion: direccion,
-            email: email,
-            password: password,
-          }),
-        };
-        await fetch(url + "/api/register", opts)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      },
-      logout: () => {
-        sessionStorage.removeItem("token");
-        console.log("Login Out");
-        setStore({ token: null });
-      },
+			syncTokenFromSessionStore: () =>{
+				const token  = sessionStorage.getItem("token");
+				console.log("Application loaded")
+				if (token && token !="" && token !=undefined) setStore({token: token})
 
-      login: async (email, password) => {
-        const ops = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        };
-        try {
-          const resp = await fetch(url + "/api/login/user", ops);
+			},
+      register: async (nombre, apellido, telefono, direccion, email, password, empresa, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'nombre': nombre,
+						'apellido': apellido,
+						'telefono': telefono,
+						'direccion': direccion,
+						'email': email,
+						'password': password,
+						'empresa_id': empresa
+					})
+				};
+				await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/register', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/login');
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
+      registroEmpresa: async (nombre, telefono, direccion, email, password, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'nombre': nombre,
+						'telefono': telefono,
+						'direccion': direccion,
+						'email': email,
+						'password': password
+					})
+				};
+				await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/registro', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/login-empresa');
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
+      registroCasino: async (nombre, telefono, direccion, email, password,navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'nombre': nombre,
+						'telefono': telefono,
+						'direccion': direccion,
+						'email': email,
+						'password': password
+					})
+				};
+				await fetch('https://3000-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/registro-casino', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/login-casino');
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
 
-          if (resp.status !== 200) {
-            alert("There has been some error");
-            return false;
-          }
-          const data = await resp.json();
-          console.log("This came from the backend", data);
-          sessionStorage.setItem("token", data.access_token);
-          setStore({ token: data.access_token });
-          return true;
-        } catch (error) {
-          console.error("There has been an error login in");
-        }
-      },
-      getMessage: async () => {
-        try {
-          // fetching data from the backend
-          const resp = await fetch(url + "/api/hello");
-          const data = await resp.json();
-          setStore({ message: data.message });
-          // don't forget to return something, that is how the async resolves
-          return data;
-        } catch (error) {
-          console.log("Error loading message from backend", error);
-        }
-      },
+      login: async (email, password, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'email': email,
+						'password': password
+					})
+				};
+				await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/login/user', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/user-menu');
+						console.log("This came from the backend", data);
+						sessionStorage.setItem("token", data.access_token);
+						setStore({token: data.access_token})
+						return true;
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
+      loginEmpresa: async (email, password, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'email': email,
+						'password': password
+					})
+				};
+				await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/login/empresa', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/empresa');
+						console.log("This came from the backend", data);
+						sessionStorage.setItem("token", data.access_token);
+						setStore({token: data.access_token})
+						return true
 
-      changeColor: (index, color) => {
-        //get the store
-        const store = getStore();
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
+      loginCasino: async (email, password, navigate) => {
+				const opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						'email': email,
+						'password': password
+					})
+				};
+				await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/login/casino', opts)
+					.then(response => response.json())
+					.then((data) => {
+						navigate('/menu-casino');
+						console.log("This came from the backend", data);
+						sessionStorage.setItem("token", data.access_token);
+						setStore({token: data.access_token})
+						return true
 
-        //we have to loop the entire demo array to look for the respective index
-        //and change its color
-        const demo = store.demo.map((elm, i) => {
-          if (i === index) elm.background = color;
-          return elm;
-        });
-
-        //reset the global store
-        setStore({ demo: demo });
-      },
-
+					})
+					.catch((error) => {
+						console.error(error);
+					})
+			},
+      logout: () =>{
+				sessionStorage.removeItem("token");
+				console.log("Login Out")
+				 setStore({token: null})
+			},
+      protectedData : async () => {
+				// retrieve token form localStorage
+				const token = sessionStorage.getItem('token');
+				const response = await fetch('https://3001-marellanore-casinocorpo-n6whpty9ql3.ws-us64.gitpod.io/api/protected', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + token
+					}
+				});
+				if (!response.ok) throw Error('There was a problem in the login request');
+				const responseJson = await response.json();
+				setStore(responseJson);
+			},
       createMenu: async (
         dia,
         ensalada,
@@ -153,7 +229,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-ovejuylumj9.ws-us64.gitpod.io/api/dia/menus",
+          "https://3001-marellanore-casinoborra-2e7rar8irwl.ws-us65.gitpod.io/api/dia/menus",
           opts
         )
           .then((response) => response.json())
@@ -180,7 +256,7 @@ decisionAlmuerzo: async (decision,userid) => {
 
 		})
 	};
-	await fetch("https://3001-marellanore-casinoborra-rireh116dk6.ws-us65.gitpod.io/api/decision-almuerzo", opts)
+	await fetch("https://3001-marellanore-casinoborra-2e7rar8irwl.ws-us65.gitpod.io/api/decision-almuerzo", opts)
   .then((response) => response.json())
   .then((data) => {
         console.log(data);
@@ -194,7 +270,7 @@ decisionAlmuerzo: async (decision,userid) => {
       getMenus: async () => {
         try {
           const response = await fetch(
-            "https://3001-marellanore-casinoborra-ovejuylumj9.ws-us64.gitpod.io/api/dia/menus"
+            "https://3001-marellanore-casinoborra-2e7rar8irwl.ws-us65.gitpod.io/api/dia/menus"
           );
           if (!response.ok) throw new Error("Error al consultar menús");
 		  const data = await response.json()

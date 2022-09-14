@@ -3,46 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 
 
-function Register() {
+function RegistroCasino() {
 
     const { store, actions } = useContext(Context);
     const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
     const [telefono, setTelefono] = useState('');
     const [direccion, setDireccion] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [empresa, setEmpresa] = useState('');
     const navigate = useNavigate();
 
 
-    const register = (event) => {
+    const registroCasino = (event) => {
         event.preventDefault();
-        actions.register(nombre, apellido, telefono, direccion, email, password, empresa, navigate);
+        actions.registroCasino(nombre, telefono, direccion, email, password, navigate);
     };
 
 
     return (
         <div className='container mt-5 border border-5 border-success mt-5 mb-5 shadow-lg p-3 mb-5 bg-white rounded'>
-            <h1 className='text-success'>Registrarse</h1>
-            <form onSubmit={register} className='row g-3 needs-validation'>
+            <h1 className='text-success'>Registro de casino</h1>
+            <form onSubmit={registroCasino} className='row g-3 needs-validation'>
             <div className='form-group col-md-5 mt-5'>
                     <input
                         value={nombre}
                         type='nombre'
                         className='form-control'
-                        placeholder='Nombre'
+                        placeholder='Nombre del casino'
                         onChange={event => setNombre(event.target.value)}
-                        required
-                    />
-                </div>
-                <div className='form-group col-md-5 mt-5'>
-                    <input
-                        value={apellido}
-                        type='apellido'
-                        className='form-control'
-                        placeholder='Apellido'
-                        onChange={event => setApellido(event.target.value)}
                         required
                     />
                 </div>
@@ -51,7 +39,7 @@ function Register() {
                         value={telefono}
                         type='telefono'
                         className='form-control'
-                        placeholder='Teléfono'
+                        placeholder='Teléfono de contacto del casino'
                         onChange={event => setTelefono(event.target.value)}
                         required
                     />
@@ -61,7 +49,7 @@ function Register() {
                         value={direccion}
                         type='direccion'
                         className='form-control'
-                        placeholder='Dirección'
+                        placeholder='Dirección de casino'
                         onChange={event => setDireccion(event.target.value)}
                         required
                     />
@@ -71,7 +59,7 @@ function Register() {
                         value={email}
                         type='email'
                         className='form-control'
-                        placeholder='Email'
+                        placeholder='Email de contacto del casino'
                         onChange={event => setEmail(event.target.value)}
                         required
                     />
@@ -86,16 +74,6 @@ function Register() {
                         required
                     />
                 </div>
-                <div className='form-group col-md-5 mt-5'>
-                    <input
-                        value={empresa}
-                        type='empresa'
-                        className='form-control'
-                        placeholder='Escriba el ID de su empresa'
-                        onChange={event => setEmpresa(event.target.value)}
-                        required
-                    />
-                </div>
                 <div className='mt-5 mb-3'>
                     <button type='submit' className=' btn btn-success'>
                         Registrarse
@@ -106,4 +84,4 @@ function Register() {
     );
 }
 
-export default Register
+export default RegistroCasino
