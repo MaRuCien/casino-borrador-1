@@ -66,7 +66,7 @@ function Navbar() {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link text-light" href="/">
+                  <a className="nav-link text-light" href="/formulario-problema">
                     Reportar un problema{" "}
                     <FontAwesomeIcon icon={faCircleExclamation} />
                   </a>
