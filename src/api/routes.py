@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, Usuario, Empresa, Casino, Menu, Dia, Reporte_Usuario, Decision
+from api.models import db, Usuario, Empresa, Casino, Menu, Dia, Reporte_Usuario, Decision_Almuerzo
 from api.utils import generate_sitemap, APIException
 import os
 from flask_jwt_extended import create_access_token
@@ -581,21 +581,21 @@ def Problema_usuario(id = None):
 def D_almuerzo(id = None):
     if request.method == 'GET':
         if id is not None:
-            request.method: Decision.query.get(id)
-            if not decision: return jsonify({ "msg": "No registramos su decision de Almuerzo" }), 404
-            return jsonify(decision.serialize()), 200
+            request.method: Decision_Almuerzo.query.get(id)
+            if not decision_almuerzo: return jsonify({ "msg": "No registramos su decision de Almuerzo" }), 404
+            return jsonify(decision_almuerzo.serialize()), 200
         else:
-            decision = Decision.query.all()
-            decision = list(map(lambda decision: decision.serialize(), decision))
+            decision_almuerzo = Decision_Almuerzo.query.all()
+            decision_almuerzo = list(map(lambda decision_almuerzo: decision_almuerzo.serialize(), decision_almuerzo))
 
-            return jsonify(decision), 200
-    
+            return jsonify(decision_almuerzo), 200
+
     if request.method == 'POST':
         decision = request.json.get("decision")
         usuario_id = request.json.get("usuario_id")  
-    
+
         if not decision: return jsonify({ "msg": "Favor reportar problema" }), 400
-        
+
         decision_almuerzo = Decision_Almuerzo()
         decision_almuerzo.decision = decision
         decision_almuerzo.usuario_id = usuario_id
