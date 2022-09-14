@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, Usuario, Empresa, Casino, Menu, Dia, Reporte_Usuario, Decision_Almuerzo
+from api.models import db, Usuario, Empresa, Casino, Menu, Dia, Reporte_Usuario, Decision
 from api.utils import generate_sitemap, APIException
 import os
 from flask_jwt_extended import create_access_token
@@ -759,3 +759,38 @@ def update_menu_with_dia(id):
 def get_menu_with_diaById(id):
     if not Dia.query.get(id): return jsonify({ "msg": "No encontramos el menu" }), 404
     return jsonify(Dia.query.get(id).serialize_with_menus()), 200
+
+#Mostrar decision con su usuario
+@api.route('/entregas', methods=['GET'])
+def get_entregas():
+        decisiones  = Decision.query.all()
+        decisiones = list(map(lambda decision: decision.serialize(), decisiones))
+
+        return jsonify(decisiones), 200
+
+
+#Crear la vista de entregas
+@api.route('/entregas', methods=['POST'])
+def create_entrega():
+
+    #traigo los datos
+    entrega = request.json.get('decision')
+
+    nombre = request.json.get('nombre')
+    apellido = request.json.get('apellido')
+    telefono = request.json.get('telefono')
+    direccion = request.json.get('direccion')
+
+    entrega = Decision()
+    entrega.decision = decision
+
+    usuario = Usuario()
+    usuario.nombre = nombre
+    usuario.apellido = apellido
+    usuario.telefono = telefono
+    usuario.direccion = direccion
+
+    entrega.usuario = entrega
+    entrega.save()
+
+    return jsonify(entrega.serialize()), 201

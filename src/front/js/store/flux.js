@@ -26,6 +26,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         email: "",
       },
       menus: [],
+      entregas:[]
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -99,7 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }),
         };
         await fetch(
-          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/registro",
+          "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/registro",
           opts
         )
           .then((response) => response.json())
@@ -320,6 +321,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
           setStore({
             menus: data,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      getDecision: async () => {
+        try {
+          const response = await fetch(
+            "https://3001-marellanore-casinoborra-4al3upzcsrk.ws-us65.gitpod.io/api/entregas"
+          );
+          if (!response.ok) throw new Error("Error al consultar las entregas");
+          const data = await response.json();
+
+          setStore({
+            entregas: data,
           });
         } catch (error) {
           console.log(error);

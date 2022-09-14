@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 const DireccionesUsuario = () => {
+  const { store } = useContext(Context)
   return (
     <div className="container mt-5">
       <div className="row">
@@ -10,8 +12,9 @@ const DireccionesUsuario = () => {
             <h3>Direcciones de Usuario</h3>
             <hr />
           </div>
+          
           <form className="file-upload">
-            <div className="row mb-5 gx-5">
+          <div className="row mb-5 gx-5">
               <div className="col-xxl-8 mb-5 mb-xxl-0">
                 <div className="bg-secondary-soft px-4 py-5 rounded">
                   <div className="row g-3">
@@ -25,14 +28,20 @@ const DireccionesUsuario = () => {
                             <th scope="col">Dirección</th>
                           </tr>
                         </thead>
-                        <tbody>
+          {!!store.entregas &&
+            store.entregas.map((entrega, i) => {
+              return (
+                <tbody>
                           <tr>
-                            <th scope="row">1</th>
-                            <td>Juan</td>
-                            <td>Perez</td>
-                            <td>Perico Los Palotes #4564, Melipilla</td>
+                            <th scope="row">{entrega.user_id}</th>
+                            <td>{entrega.nombre}</td>
+                            <td>{entrega.apellido}</td>
+                            <td>{entrega.direccion}</td>
                           </tr>
                         </tbody>
+              )})}
+            
+                        
                       </table>
 
                       <hr />

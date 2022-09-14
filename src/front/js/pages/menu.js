@@ -43,7 +43,7 @@ const Menu = () => {
     <div className="container mt-5 mb-5">
       <h1>Menú de la semana</h1>
       <div className="border border-success border-5 mt-5">
-        <h6 className="mt-3 p-4 ml-5">Semana 19 al 22 de Julio 2022</h6>
+        <h6 className="mt-3 p-4 ml-5">Semana 19 al 23 de Septiembre 2022</h6>
         <div className="container">
           <div className="row d-flex justify-content-center">
             {!!store.menus &&
