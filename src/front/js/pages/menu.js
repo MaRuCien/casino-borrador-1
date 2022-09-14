@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useState } from "react";
 
 const Menu = () => {
+
   const { store, actions } = useContext(Context);
 
   const [check1, setCheck1] = React.useState(false);
@@ -131,6 +132,7 @@ const Menu = () => {
           >
             Enviar
           </button>
+
         </div>
       </div>
     </div>
