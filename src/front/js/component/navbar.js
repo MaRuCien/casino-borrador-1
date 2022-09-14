@@ -2,12 +2,13 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faMobileScreen } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import Logo from "../../img/logo_nav.png";
 import { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
-import { faAddressCard } from "@fortawesome/free-solid-svg-icons";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+
 
 function Navbar() {
   const { store, actions } = useContext(Context);
@@ -39,43 +40,41 @@ function Navbar() {
         >
           <div className="navbar-nav">
             {!store.token ? (
-              <Link to="/login">
-                <a className="nav-link text-light" href="/">
-                  Login <FontAwesomeIcon icon={faArrowRightToBracket} />
-                </a>
-              </Link>
+              <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Login <FontAwesomeIcon icon={faArrowRightToBracket} />
+              </a>
+              <ul className="dropdown-menu">
+                <Link to="/login" className="nav-link text-light" ><li className="dropdown-item">Login como usuario</li></Link>
+                <Link to="/login-empresa" className="nav-link text-light" ><li className="dropdown-item">Login como empresa</li></Link>
+                <Link to="/login-casino" className="nav-link text-light" ><li className="dropdown-item">Login como casino</li></Link>
+              </ul>
+            </li>
             ) : (
-              <a
+              <div className='offcanvas offcanvas-end bg-success' id='offcanvasNavbar' aria-labelledby='offcanvasNavbarLabel'>
+              <div className='offcanvas-body'>
+              <ul className='navbar-nav justify-content-end flex-grow-1 pe-3'>
+                <li>
+                <a
                 onClick={() => actions.logout()}
                 className="nav-link text-light"
                 href="/"
               >
                 Log Out <FontAwesomeIcon icon={faArrowRightToBracket} />
               </a>
-            )}
-
-            <div className="offcanvas-body">
-              <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <a className="nav-link text-light" href="/">
-                  Contacto <FontAwesomeIcon icon={faMobileScreen} />
-                </a>
-
-                <li className="nav-item">
-                  <a className="nav-link text-light" href="/">
-                    Perfil <FontAwesomeIcon icon={faAddressCard} />
-                  </a>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link text-light" href="/formulario-problema">
-                    Reportar un problema{" "}
-                    <FontAwesomeIcon icon={faCircleExclamation} />
-                  </a>
-                </li>
-                {/* <li className="nav-item">
-                <a className='nav-link text-light' href='/'>Logout <FontAwesomeIcon icon={faArrowRightToBracket} /></a>
-              </li> */}
+                  <li className='nav-item'>
+                      <Link to="/reporte-problema" className='nav-link text-light'>Reportar un problema <FontAwesomeIcon icon={faCircleExclamation } /></Link>
+                  </li>
               </ul>
-            </div>
+          </div>
+          </div>    
+            )}
+             <li>   
+                <Link to="/contact" className="nav-link text-light" href="/">
+                  Contacto <FontAwesomeIcon icon={faMobileScreen} />
+                </Link>
+                </li>
           </div>
         </div>
       </div>
