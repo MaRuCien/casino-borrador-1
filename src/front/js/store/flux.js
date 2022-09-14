@@ -165,6 +165,32 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.error(error);
           });
       },
+
+//decisionalmuerzo
+decisionAlmuerzo: async (decision,userid) => {
+	const opts = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			'usuario_id':userid,
+			'decision':decision,
+		
+
+		})
+	};
+	await fetch("https://3001-marellanore-casinoborra-rireh116dk6.ws-us65.gitpod.io/api/decision-almuerzo", opts)
+  .then((response) => response.json())
+  .then((data) => {
+        console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+},
+
+
       getMenus: async () => {
         try {
           const response = await fetch(

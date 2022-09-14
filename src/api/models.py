@@ -63,7 +63,8 @@ class Usuario(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresa.id'), nullable=False)
     reportes = db.relationship('Reporte_Usuario', backref='usuario', lazy= True)
-  
+    decision = db.relationship('Decision_Almuerzo', backref='usuario', lazy= True)
+
     def serialize(self):
         return {
             "id": self.id,
@@ -226,6 +227,37 @@ class Reporte_Usuario(db.Model):
     def delete(self):
          db.session.delete(self)
          db.session.commit()
+
+
+class Decision_Almuerzo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    decision = db.Column(db.String(120), unique=False, nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), unique = False, nullable = False)
+ 
+    def serialize(self):
+        return {
+        "id": self.id,
+        "decision": self.decision,
+        "usuario_id": self.usuario_id,
+
+        # do not serialize the password, its a security breach
+        }
+
+    def save(self):
+         db.session.add(self)
+         db.session.commit()
+    
+    def update(self):
+         db.session.commit()
+    
+    def delete(self):
+         db.session.delete(self)
+         db.session.commit()
+
+
+
+
+
 
 # class Pedidos(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
