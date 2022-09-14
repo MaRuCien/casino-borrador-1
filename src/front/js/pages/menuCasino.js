@@ -1,6 +1,7 @@
 import { format } from "prettier";
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom"
 
 const MenuCasino = () => {
   const { store } = useContext(Context);
@@ -26,6 +27,11 @@ const MenuCasino = () => {
                 
               );
             })}
+            <Link to="/admin-casino">
+            <button  type="button" className="btn btn-success w-100 mb-4">
+              Agregar
+            </button>
+            </Link>  
         </div>
       </div>
     </div>

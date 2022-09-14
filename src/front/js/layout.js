@@ -25,9 +25,12 @@ import ConfirmReporte from "./pages/confirmReporte";
 import InfoEmpresa from "./pages/infoEmpresa";
 import DatosProblemas from "./pages/infoProblemas";
 import Register from "./pages/register";
+import RegistroEmpresa from "./pages/registroEmpresa";
+import RegistroCasino from "./pages/registroCasino";
+import LoginEmpresa from "./pages/loginEmpresa";
+import LoginCasino from "./pages/logoCasino"
 
-//rutaprivada
-import PrivateRoutes from "./component/PrivateRoutes";
+
 
 //create your first component
 const Layout = () => {
@@ -37,34 +40,39 @@ const Layout = () => {
 
   return (
     <div>
-      <BrowserRouter basename={basename}>
+ <BrowserRouter basename={basename}>
         <ScrollToTop>
           <Navbar />
           <Routes>
-             <Route element={<PrivateRoutes/>}>
-             <Route element={<ResumenPanelAdmin />} path="/admin"></Route>
-             <Route element={<InfoEmpresa />} path="/informacion-empresa"></Route>
-            <Route element={<DireccionesUsuario />} path="/informacion-delivery"></Route>
-            <Route element={<DatosProblemas />} path="/detalle-problema"></Route>
-             </Route>
+            
+            <Route element={<ResumenPanelAdmin />} path="/admin"></Route>
+            <Route element={<InfoEmpresa />} path="/informacion-empresa"></Route>
+           <Route element={<DireccionesUsuario />} path="/informacion-delivery"></Route>
+           <Route element={<DatosProblemas />} path="/detalle-problema"></Route>
+           
+           <Route element={<PerfilEmpresa />} path="/empresa"></Route>
+           
+           <Route element={<ConfirmReporte />} path="/confirmacion-problema"></Route>
+           <Route element={<FormReporte />} path="/formulario-problema"></Route>
+           <Route element={<Reporte />} path="/reporte-problema"></Route>
+           <Route element={<Contact />} path="/contact"></Route>
+           <Route element={<Menu />} path="/user-menu"></Route>
+           <Route element={<MenuCasino />} path="/menu-casino"></Route>
+           
+           <Route element={<AdminEmpresa />} path="/admin-empresa"></Route>
+           <Route element={<AdminCasino />} path="/admin-casino"></Route>
+           <Route element={<PasswordRecoveryEmail />} path="/recovery"></Route>
+           <Route element={<AdminEmpresa />} path="/admin-empresa"></Route>
+           <Route element={<Register />} path="/register"></Route>
+           <Route element={<RegistroEmpresa />} path="/registro-empresa"></Route>
+           <Route element={<RegistroCasino />} path="/registro-casino"></Route>
+           <Route element={<Login />} path="/login"></Route>
+           <Route element={<LoginEmpresa />} path="/login-empresa"></Route>
+           <Route element={<LoginCasino />} path="/login-casino"></Route>
+           <Route element={<Home />} path="/" />
+           <Route element={<h1>Not found!</h1>} />
 
-            <Route element={<ConfirmReporte />} path="/confirmacion-problema"></Route>
-            <Route element={<FormReporte />} path="/formulario-problema"></Route>
-            <Route element={<Reporte />} path="/reporte-problema"></Route>
-            <Route element={<Contact />} path="/contact"></Route>
-            <Route element={<Menu />} path="/user-menu"></Route>
-            <Route element={<MenuCasino />} path="/menu-casino"></Route>
-            <Route element={<PerfilEmpresa />} path="/empresa"></Route>
-            <Route element={<AdminEmpresa />} path="/admin-empresa"></Route>
-            <Route element={<AdminCasino />} path="/admin-casino"></Route>
-            <Route element={<PasswordRecoveryEmail />} path="/recovery"></Route>
-            <Route element={<AdminEmpresa />} path="/admin-empresa"></Route>
-            <Route element={<Register />} path="/register"></Route>
-            <Route element={<Login />} path="/login"></Route>
-            <Route element={<Home />} path="/" />
-            <Route element={<h1>Not found!</h1>} />
-
-          </Routes>
+         </Routes>
           <Footer />
         </ScrollToTop>
       </BrowserRouter>
