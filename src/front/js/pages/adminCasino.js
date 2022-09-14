@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
@@ -89,7 +90,9 @@ const AdminCasino = () => {
         <button type="submit" className="btn btn-success btn-lg m-2">
           Confirmar
         </button>
+        <Link to="/detalle-empresa"><button className="btn btn-success btn-lg m-2">Inicio</button></Link> 
       </div>
+     
     </form>
   );
 };

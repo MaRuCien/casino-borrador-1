@@ -29,6 +29,9 @@ const AdminEmpresa = () => {
                             </thead>
                         <Usuarios />
                         </table>
+                        <div className=''>
+                            <Link to="/menu-casino"><button className='btn btn-success'>Ver Menú</button></Link>
+                        </div>
                     </div>
 
                 </div>

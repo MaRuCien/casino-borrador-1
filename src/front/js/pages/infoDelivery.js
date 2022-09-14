@@ -42,7 +42,7 @@ const DireccionesUsuario = () => {
                                   <td>{entrega.apellido}</td>
                                   <td>{entrega.direccion}</td>
                                   <td>{entrega.telefono}</td>
-                                  <Link to="/">
+                                  <Link to="/mapas">
                                     <button
                                       type="button"
                                       className="btn btn-success btn-lg mt-1"

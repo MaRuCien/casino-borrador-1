@@ -29,6 +29,7 @@ import RegistroEmpresa from "./pages/registroEmpresa";
 import RegistroCasino from "./pages/registroCasino";
 import LoginEmpresa from "./pages/loginEmpresa";
 import LoginCasino from "./pages/logoCasino"
+import Mapas from "./pages/mapas"
 
 
 
@@ -69,6 +70,7 @@ const Layout = () => {
            <Route element={<Login />} path="/login"></Route>
            <Route element={<LoginEmpresa />} path="/login-empresa"></Route>
            <Route element={<LoginCasino />} path="/login-casino"></Route>
+           <Route element={<Mapas />} path="/mapas"></Route>
            <Route element={<Home />} path="/" />
            <Route element={<h1>Not found!</h1>} />
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import '../../styles/adminEmpresa.css'
 import InfoCasino from '../component/infoCasino';
 import Usuarios from '../component/infoUsuarios';
@@ -28,6 +29,10 @@ const DetalleEmpresa = () => {
                         </thead>
                     <Usuarios />
                     </table>
+                    <div className=''>
+                        <Link to="/admin-casino"><button className='btn btn-success'>Crear Menú</button></Link>
+                        <Link to="/menu-casino"><button className='btn btn-success'>Ver Menú</button></Link>
+                    </div>
                 </div>
 
             </div>

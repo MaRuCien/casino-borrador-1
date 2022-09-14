@@ -29,8 +29,13 @@ const MenuCasino = () => {
               );
             })}
             <Link to="/admin-casino">
-            <button  type="button" className="btn btn-success w-100 mb-4">
+            <button  type="button" className="btn btn-success btn-lg m-2">
               Agregar
+            </button>
+            </Link>  
+            <Link to="/detalle-empresa">
+            <button  type="button" className="btn btn-success btn-lg m-2">
+              Inicio
             </button>
             </Link>  
         </div>
